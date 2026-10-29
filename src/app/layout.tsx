@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 
 import "@/styles/globals.scss";
 
@@ -28,11 +29,13 @@ export default function RootLayout({
     <html lang="fr" className={inter.variable}>
       <body>
         <AuthProvider>
-          <Header />
+          <FavoritesProvider>
+            <Header />
 
-          <main>{children}</main>
+            <main>{children}</main>
 
-          <Footer />
+            <Footer />
+          </FavoritesProvider>
         </AuthProvider>
       </body>
     </html>
