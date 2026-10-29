@@ -1,0 +1,118 @@
+@use "../../variables" as *;
+
+.card {
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  background-color: $color-white;
+
+  border-radius: 8px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 1 / 1.05;
+
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.favoriteButton {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  font-size: 17px;
+
+  color: #666666;
+  background-color: rgba($color-white, 0.95);
+
+  border: 0;
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: $color-primary;
+    transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.content {
+  min-height: 180px;
+
+  padding: 22px 20px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0 0 8px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+
+  color: $color-text;
+}
+
+.location {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.4;
+
+  color: #797979;
+}
+
+.price {
+  margin: 28px 0 0;
+
+  font-size: 12px;
+
+  color: #777777;
+
+  strong {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: $color-text;
+  }
+}

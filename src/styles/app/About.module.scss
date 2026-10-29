@@ -1,0 +1,232 @@
+@use "../variables" as *;
+
+.about {
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* Introduction */
+
+.intro {
+  max-width: 900px;
+
+  margin: 0 auto 45px;
+
+  text-align: center;
+
+  h1 {
+    margin: 0 0 16px;
+
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    color: #a83922;
+  }
+
+  p {
+    margin: 0 auto 22px;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    color: $color-text;
+
+    &:last-child {
+      max-width: 780px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Grande image */
+
+.heroImage {
+  position: relative;
+
+  width: 100%;
+  height: 490px;
+
+  margin-bottom: 45px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+/* Mission */
+
+.mission {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+
+  gap: 70px;
+}
+
+.missionContent {
+  h2 {
+    margin: 0 0 24px;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #a83922;
+  }
+
+  ol {
+    margin: 0 0 22px;
+    padding-left: 22px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    color: $color-text;
+  }
+}
+
+.highlight {
+  margin: 0;
+
+  max-width: 560px;
+
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+
+  color: #b43b22;
+}
+
+.missionImage {
+  position: relative;
+
+  width: 100%;
+  height: 490px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+/* Tablette */
+
+@media (max-width: $breakpoint-tablet) {
+  .about {
+    padding: 35px 20px 50px;
+  }
+
+  .intro {
+    margin-bottom: 35px;
+
+    h1 {
+      font-size: 28px;
+    }
+  }
+
+  .heroImage {
+    height: 380px;
+    margin-bottom: 40px;
+  }
+
+  .mission {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .missionContent {
+    order: 1;
+  }
+
+  .missionImage {
+    order: 2;
+
+    height: 380px;
+  }
+
+  .highlight {
+    max-width: 100%;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: $breakpoint-mobile) {
+  .about {
+    padding: 28px 16px 40px;
+  }
+
+  .intro {
+    margin-bottom: 28px;
+
+    h1 {
+      margin-bottom: 14px;
+
+      font-size: 24px;
+    }
+
+    p {
+      margin-bottom: 16px;
+
+      font-size: 13px;
+
+      br {
+        display: none;
+      }
+    }
+  }
+
+  .heroImage {
+    height: 240px;
+
+    margin-bottom: 32px;
+
+    border-radius: 14px;
+  }
+
+  .mission {
+    gap: 28px;
+  }
+
+  .missionContent {
+    h2 {
+      margin-bottom: 18px;
+
+      font-size: 17px;
+    }
+
+    ol {
+      gap: 16px;
+
+      font-size: 13px;
+    }
+  }
+
+  .highlight {
+    font-size: 15px;
+  }
+
+  .missionImage {
+    height: 280px;
+
+    border-radius: 14px;
+  }
+}

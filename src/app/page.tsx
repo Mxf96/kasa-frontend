@@ -1,69 +1,174 @@
 import Image from "next/image";
-import styles from "./page.module.css";
+
+import AccommodationCard from "@/components/accommodations/AccommodationCard";
+
+import styles from "@/styles/app/page.module.scss";
+
+const accommodations = [
+  {
+    id: 1,
+    title: "Appartement cosy",
+    location: "Île de France - Paris 17e",
+    price: 100,
+    image: "/assets/img/accommodations/Appartement cosy.svg",
+  },
+  {
+    id: 2,
+    title: "Magnifique appartement proche Canal Saint Martin",
+    location: "Île de France - Paris 10e",
+    price: 110,
+    image: "/assets/img/accommodations/Appartement de Standing - 10e.svg",
+  },
+  {
+    id: 3,
+    title: "Studio de charme - Buttes Chaumont",
+    location: "Île de France - Paris 20e",
+    price: 120,
+    image: "/assets/img/accommodations/Studio de charme - Buttes Chaumont.svg",
+  },
+  {
+    id: 4,
+    title: "Nid douillet au coeur du 11ème",
+    location: "Île de France - Paris 11e",
+    price: 130,
+    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
+  },
+  {
+    id: 5,
+    title: "Appartement de Standing - 10e",
+    location: "Île de France - Paris 10e",
+    price: 140,
+    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
+  },
+  {
+    id: 6,
+    title: "Studio d'artiste",
+    location: "Île de France - Paris 18e",
+    price: 150,
+    image: "/assets/img/accommodations/Studio d'artiste.svg",
+  },
+  {
+    id: 7,
+    title: "Appartement cosy",
+    location: "Île de France - Paris 17e",
+    price: 100,
+    image: "/assets/img/accommodations/Appartement cosy.svg",
+  },
+  {
+    id: 8,
+    title: "Magnifique appartement proche Canal Saint Martin",
+    location: "Île de France - Paris 10e",
+    price: 110,
+    image: "/assets/img/accommodations/Appartement de Standing - 10e.svg",
+  },
+  {
+    id: 9,
+    title: "Studio de charme - Buttes Chaumont",
+    location: "Île de France - Paris 20e",
+    price: 120,
+    image: "/assets/img/accommodations/Studio de charme - Buttes Chaumont.svg",
+  },
+  {
+    id: 10,
+    title: "Nid douillet au coeur du 11ème",
+    location: "Île de France - Paris 11e",
+    price: 130,
+    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
+  },
+  {
+    id: 11,
+    title: "Appartement de Standing - 10e",
+    location: "Île de France - Paris 10e",
+    price: 140,
+    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
+  },
+  {
+    id: 12,
+    title: "Studio d'artiste",
+    location: "Île de France - Paris 18e",
+    price: 150,
+    image: "/assets/img/accommodations/Studio d'artiste.svg",
+  },
+];
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className={styles.home}>
+      <section className={styles.hero}>
+        <h1>Chez vous, partout et ailleurs</h1>
+
+        <p>
+          Avec Kasa, vivez des séjours uniques dans des hébergements chaleureux,
+          sélectionnés avec soin par nos hôtes.
+        </p>
+      </section>
+
+      <section className={styles.banner}>
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/assets/img/background/Frame 47.svg"
+          alt="Maison moderne au milieu des dunes"
+          fill
           priority
+          sizes="(max-width: 1200px) 100vw, 1200px"
         />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
+      </section>
+
+      <section
+        className={styles.accommodations}
+        aria-label="Logements disponibles"
+      >
+        {accommodations.map((accommodation) => (
+          <AccommodationCard
+            key={accommodation.id}
+            title={accommodation.title}
+            location={accommodation.location}
+            price={accommodation.price}
+            image={accommodation.image}
+          />
+        ))}
+      </section>
+
+      <section className={styles.howItWorks}>
+        <div className={styles.howItWorksHeader}>
+          <h2>Comment ça marche ?</h2>
+
           <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+            Que vous partiez pour un week-end improvisé, des vacances en famille
+            ou un voyage professionnel,
+            <br />
+            Kasa vous aide à trouver un lieu qui vous ressemble.
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className={styles.steps}>
+          <article className={styles.step}>
+            <h3>Recherchez</h3>
+
+            <p>
+              Entrez votre destination, vos dates et laissez Kasa faire le
+              reste.
+            </p>
+          </article>
+
+          <article className={styles.step}>
+            <h3>Réservez</h3>
+
+            <p>
+              Profitez d'une plateforme sécurisée et de profils d'hôtes
+              vérifiés.
+            </p>
+          </article>
+
+          <article className={styles.step}>
+            <h3>Vivez l'expérience</h3>
+
+            <p>
+              Installez-vous, profitez de votre séjour, et sentez-vous chez
+              vous, partout.
+            </p>
+          </article>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

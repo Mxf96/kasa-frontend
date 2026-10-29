@@ -1,0 +1,55 @@
+@use "../../variables" as *;
+
+.footer {
+  width: 100%;
+  margin-top: auto;
+
+  background-color: $color-white;
+}
+
+.footerContainer {
+  width: 100%;
+  min-height: 64px;
+
+  padding: 10px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: auto;
+    height: 36px;
+  }
+}
+
+.copyright {
+  margin: 0;
+
+  font-size: 11px;
+  font-weight: 400;
+
+  color: #6b6b6b;
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .footerContainer {
+    padding: 10px 16px;
+  }
+
+  .logo {
+    img {
+      height: 32px;
+    }
+  }
+
+  .copyright {
+    font-size: 9px;
+  }
+}
