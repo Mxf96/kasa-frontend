@@ -1,9 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { useAuth } from "@/context/AuthContext";
 
 import styles from "@/styles/components/layout/Header.module.scss";
 
 export default function Header() {
+  const { user, isLoading } = useAuth();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -21,43 +27,55 @@ export default function Header() {
           <Image
             src="/assets/img/logo/logo.svg"
             alt="Kasa"
-            width={100}
-            height={40}
+            width={120}
+            height={45}
             priority
           />
         </Link>
 
         <div className={styles.actions}>
-          <Link href="/accommodations/new" className={styles.addAccommodation}>
-            <span aria-hidden="true">+</span>
-            <span>Ajouter un logement</span>
-          </Link>
+          {!isLoading &&
+            (user ? (
+              <>
+                <Link
+                  href="/accommodations/new"
+                  className={styles.addAccommodation}
+                >
+                  <span aria-hidden="true">+</span>
+                  <span>Ajouter un logement</span>
+                </Link>
 
-          <Link
-            href="/favorites"
-            className={styles.iconLink}
-            aria-label="Mes favoris"
-          >
-            <Image
-              src="/assets/img/icons/heart.svg"
-              alt=""
-              width={18}
-              height={18}
-            />
-          </Link>
+                <Link
+                  href="/favorites"
+                  className={styles.iconLink}
+                  aria-label="Mes favoris"
+                >
+                  <Image
+                    src="/assets/img/icons/heart.svg"
+                    alt=""
+                    width={18}
+                    height={18}
+                  />
+                </Link>
 
-          <Link
-            href="/messages"
-            className={styles.iconLink}
-            aria-label="Mes messages"
-          >
-            <Image
-              src="/assets/img/icons/message.svg"
-              alt=""
-              width={18}
-              height={18}
-            />
-          </Link>
+                <Link
+                  href="/messages"
+                  className={styles.iconLink}
+                  aria-label="Mes messages"
+                >
+                  <Image
+                    src="/assets/img/icons/message.svg"
+                    alt=""
+                    width={18}
+                    height={18}
+                  />
+                </Link>
+              </>
+            ) : (
+              <Link href="/login" className={styles.loginLink}>
+                Se connecter
+              </Link>
+            ))}
         </div>
       </div>
     </header>

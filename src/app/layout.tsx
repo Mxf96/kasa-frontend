@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+
+import { AuthProvider } from "@/context/AuthContext";
 
 import "@/styles/globals.scss";
 
@@ -25,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body>
-        <Header />
+        <AuthProvider>
+          <Header />
 
-        <main>{children}</main>
+          <main>{children}</main>
 
-        <Footer />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

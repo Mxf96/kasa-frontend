@@ -2,96 +2,13 @@ import Image from "next/image";
 
 import AccommodationCard from "@/components/accommodations/AccommodationCard";
 
+import { getProperties } from "@/lib/api/properties";
+
 import styles from "@/styles/app/page.module.scss";
 
-const accommodations = [
-  {
-    id: 1,
-    title: "Appartement cosy",
-    location: "Île de France - Paris 17e",
-    price: 100,
-    image: "/assets/img/accommodations/Appartement cosy.svg",
-  },
-  {
-    id: 2,
-    title: "Magnifique appartement proche Canal Saint Martin",
-    location: "Île de France - Paris 10e",
-    price: 110,
-    image: "/assets/img/accommodations/Appartement de Standing - 10e.svg",
-  },
-  {
-    id: 3,
-    title: "Studio de charme - Buttes Chaumont",
-    location: "Île de France - Paris 20e",
-    price: 120,
-    image: "/assets/img/accommodations/Studio de charme - Buttes Chaumont.svg",
-  },
-  {
-    id: 4,
-    title: "Nid douillet au coeur du 11ème",
-    location: "Île de France - Paris 11e",
-    price: 130,
-    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
-  },
-  {
-    id: 5,
-    title: "Appartement de Standing - 10e",
-    location: "Île de France - Paris 10e",
-    price: 140,
-    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
-  },
-  {
-    id: 6,
-    title: "Studio d'artiste",
-    location: "Île de France - Paris 18e",
-    price: 150,
-    image: "/assets/img/accommodations/Studio d'artiste.svg",
-  },
-  {
-    id: 7,
-    title: "Appartement cosy",
-    location: "Île de France - Paris 17e",
-    price: 100,
-    image: "/assets/img/accommodations/Appartement cosy.svg",
-  },
-  {
-    id: 8,
-    title: "Magnifique appartement proche Canal Saint Martin",
-    location: "Île de France - Paris 10e",
-    price: 110,
-    image: "/assets/img/accommodations/Appartement de Standing - 10e.svg",
-  },
-  {
-    id: 9,
-    title: "Studio de charme - Buttes Chaumont",
-    location: "Île de France - Paris 20e",
-    price: 120,
-    image: "/assets/img/accommodations/Studio de charme - Buttes Chaumont.svg",
-  },
-  {
-    id: 10,
-    title: "Nid douillet au coeur du 11ème",
-    location: "Île de France - Paris 11e",
-    price: 130,
-    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
-  },
-  {
-    id: 11,
-    title: "Appartement de Standing - 10e",
-    location: "Île de France - Paris 10e",
-    price: 140,
-    image: "/assets/img/accommodations/Nid douillet au coeur du 11ème.svg",
-  },
-  {
-    id: 12,
-    title: "Studio d'artiste",
-    location: "Île de France - Paris 18e",
-    price: 150,
-    image: "/assets/img/accommodations/Studio d'artiste.svg",
-  },
-];
+export default async function Home() {
+  const accommodations = await getProperties();
 
-export default function Home() {
   return (
     <div className={styles.home}>
       <section className={styles.hero}>
@@ -120,10 +37,11 @@ export default function Home() {
         {accommodations.map((accommodation) => (
           <AccommodationCard
             key={accommodation.id}
+            id={accommodation.id}
             title={accommodation.title}
             location={accommodation.location}
-            price={accommodation.price}
-            image={accommodation.image}
+            price={accommodation.price_per_night}
+            image={accommodation.cover ?? "/assets/img/background/Frame 47.svg"}
           />
         ))}
       </section>
@@ -154,13 +72,13 @@ export default function Home() {
             <h3>Réservez</h3>
 
             <p>
-              Profitez d'une plateforme sécurisée et de profils d'hôtes
-              vérifiés.
+              Profitez d&apos;une plateforme sécurisée et de profils
+              d&apos;hôtes vérifiés.
             </p>
           </article>
 
           <article className={styles.step}>
-            <h3>Vivez l'expérience</h3>
+            <h3>Vivez l&apos;expérience</h3>
 
             <p>
               Installez-vous, profitez de votre séjour, et sentez-vous chez
