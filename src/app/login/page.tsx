@@ -35,13 +35,13 @@ export default function LoginPage() {
         password,
       });
 
-      router.push("/");
+      router.replace("/");
       router.refresh();
     } catch (error) {
       setError(
         error instanceof Error
           ? error.message
-          : "Une erreur est survenue lors de la connexion.",
+          : "Impossible de vous connecter.",
       );
     } finally {
       setIsSubmitting(false);

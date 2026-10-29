@@ -9,7 +9,6 @@ interface JwtPayload {
   sub?: number | string;
   email?: string;
   role?: UserRole;
-  name?: string;
   exp?: number;
 }
 
@@ -62,9 +61,6 @@ export async function GET() {
     response.cookies.set({
       name: "kasa_session",
       value: "",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
       path: "/",
       maxAge: 0,
     });
@@ -78,8 +74,6 @@ export async function GET() {
     email: payload.email ?? null,
 
     role: payload.role ?? null,
-
-    name: payload.name ?? null,
   };
 
   return NextResponse.json({

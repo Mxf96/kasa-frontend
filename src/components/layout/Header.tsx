@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import styles from "@/styles/components/layout/Header.module.scss";
 
 export default function Header() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, logout } = useAuth();
 
   return (
     <header className={styles.header}>
@@ -70,10 +70,22 @@ export default function Header() {
                     height={18}
                   />
                 </Link>
+
+                <button
+                  type="button"
+                  className={styles.logoutButton}
+                  onClick={() => void logout()}
+                  aria-label="Se déconnecter"
+                  title="Se déconnecter"
+                >
+                  <span className={styles.logoutIcon} aria-hidden="true" />
+                </button>
               </>
             ) : (
               <Link href="/login" className={styles.loginLink}>
-                Se connecter
+                <span className={styles.loginIcon} aria-hidden="true" />
+
+                <span>Se connecter</span>
               </Link>
             ))}
         </div>

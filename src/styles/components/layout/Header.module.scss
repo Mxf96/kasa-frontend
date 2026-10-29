@@ -122,16 +122,20 @@
   }
 }
 
+/* Connexion */
+
 .loginLink {
   display: flex;
   align-items: center;
+
+  gap: 7px;
 
   white-space: nowrap;
 
   font-size: 13px;
   font-weight: 400;
 
-  color: $color-primary;
+  color: #f25c42;
 
   transition: opacity 0.2s ease;
 
@@ -139,6 +143,72 @@
   &:focus-visible {
     opacity: 0.7;
   }
+}
+
+/* Déconnexion */
+
+.loginIcon {
+  width: 17px;
+  height: 17px;
+
+  display: block;
+  flex-shrink: 0;
+
+  background-color: #f25c42;
+
+  mask-image: url("/assets/img/icons/avatar-de-connexion.svg");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  -webkit-mask-image: url("/assets/img/icons/avatar-de-connexion.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+.logoutButton {
+  width: 18px;
+  height: 18px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 0;
+  background: transparent;
+
+  cursor: pointer;
+
+  transition: opacity 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.65;
+  }
+}
+
+.logoutIcon {
+  width: 16px;
+  height: 16px;
+
+  display: block;
+
+  background-color: #b8715e;
+
+  mask-image: url("/img/icons/se-deconnecter.svg");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  -webkit-mask-image: url("/assets/img/icons/se-deconnecter.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
 /* Tablette */
@@ -175,6 +245,16 @@
       display: none;
     }
   }
+
+  .logoutButton {
+  width: 16px;
+  height: 16px;
+}
+
+.logoutIcon {
+  width: 14px;
+  height: 14px;
+}
 }
 
 /* Mobile */
@@ -222,5 +302,16 @@
       width: 13px;
       height: 13px;
     }
+  }
+
+  .loginLink {
+    gap: 5px;
+
+    font-size: 12px;
+  }
+
+  .loginIcon {
+    width: 15px;
+    height: 15px;
   }
 }

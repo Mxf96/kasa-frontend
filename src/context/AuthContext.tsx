@@ -61,15 +61,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
-    const initializeAuthentication = async () => {
+    async function initialize() {
       setIsLoading(true);
 
       await refreshUser();
 
       setIsLoading(false);
-    };
+    }
 
-    void initializeAuthentication();
+    void initialize();
   }, [refreshUser]);
 
   const login = useCallback(async ({ email, password }: LoginCredentials) => {
@@ -96,14 +96,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     if (!data.user) {
-      throw new Error("Les informations de l'utilisateur sont introuvables.");
+      throw new Error("Aucun utilisateur n'a été retourné.");
     }
 
     setUser(data.user);
   }, []);
 
   const register = useCallback(
-    async ({ firstName, lastName, email, password }: RegisterData) => {
+    async ({ name, email, password }: RegisterData) => {
       const response = await fetch("/api/auth/register", {
         method: "POST",
 
@@ -112,8 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         },
 
         body: JSON.stringify({
-          firstName,
-          lastName,
+          name,
           email,
           password,
         }),
@@ -127,10 +126,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(data.message ?? "Impossible de créer le compte.");
       }
 
-      /*
-       * Une fois l'inscription réussie,
-       * on connecte automatiquement l'utilisateur.
-       */
       await login({
         email,
         password,
@@ -171,11 +166,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth(): AuthContextValue {
+export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("useAuth doit être utilisé à l'intérieur de AuthProvider.");
+    throw new Error("useAuth doit être utilisé dans AuthProvider.");
   }
 
   return context;

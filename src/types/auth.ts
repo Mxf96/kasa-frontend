@@ -4,7 +4,6 @@ export interface AuthUser {
   id: number | string | null;
   email: string | null;
   role: UserRole | null;
-  name?: string | null;
 }
 
 export interface LoginCredentials {
@@ -13,8 +12,7 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
 }

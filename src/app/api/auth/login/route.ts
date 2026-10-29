@@ -10,15 +10,29 @@ interface JwtPayload {
   sub?: number | string;
   email?: string;
   role?: UserRole;
-  name?: string;
   exp?: number;
 }
 
-interface LoginResponse {
+interface BackendUser {
+  id?: number | string;
+  email?: string;
+  role?: UserRole;
+}
+
+interface BackendLoginResponse {
   token?: string;
-  access_token?: string;
   accessToken?: string;
-  user?: Partial<AuthUser>;
+  access_token?: string;
+
+  user?: BackendUser;
+
+  data?: {
+    token?: string;
+    accessToken?: string;
+    access_token?: string;
+    user?: BackendUser;
+  };
+
   message?: string;
   error?: string;
 }
@@ -45,7 +59,7 @@ export async function POST(request: Request) {
   if (!API_URL) {
     return NextResponse.json(
       {
-        message: "La variable d'environnement API_URL n'est pas définie.",
+        message: "La variable API_URL n'est pas définie.",
       },
       {
         status: 500,
@@ -56,20 +70,64 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+    const email = typeof body.email === "string" ? body.email.trim() : "";
+
+    const password = typeof body.password === "string" ? body.password : "";
+
+    if (!email || !password) {
+      return NextResponse.json(
+        {
+          message: "L'adresse email et le mot de passe sont obligatoires.",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
+    console.log("[LOGIN] Envoi au backend :", {
+      email,
+      password: "***",
+    });
+
     const backendResponse = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
+
       headers: {
         Accept: "application/json",
+
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
-        email: body.email,
-        password: body.password,
+        email,
+        password,
       }),
+
       cache: "no-store",
     });
 
-    const data = (await backendResponse.json()) as LoginResponse;
+    const responseText = await backendResponse.text();
+
+    let data: BackendLoginResponse = {};
+
+    if (responseText) {
+      try {
+        data = JSON.parse(responseText) as BackendLoginResponse;
+      } catch {
+        data = {
+          message: responseText,
+        };
+      }
+    }
+
+    console.log("[LOGIN] Réponse backend :", {
+      status: backendResponse.status,
+
+      ok: backendResponse.ok,
+
+      data,
+    });
 
     if (!backendResponse.ok) {
       return NextResponse.json(
@@ -85,12 +143,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const token = data.token ?? data.access_token ?? data.accessToken;
+    const token =
+      data.token ??
+      data.accessToken ??
+      data.access_token ??
+      data.data?.token ??
+      data.data?.accessToken ??
+      data.data?.access_token;
 
     if (!token) {
+      console.error("[LOGIN] Aucun token trouvé :", data);
+
       return NextResponse.json(
         {
-          message: "Le backend n'a retourné aucun token d'authentification.",
+          message: "Aucun token n'a été retourné par le backend.",
         },
         {
           status: 500,
@@ -100,40 +166,43 @@ export async function POST(request: Request) {
 
     const payload = decodeJwt(token);
 
+    const backendUser = data.user ?? data.data?.user;
+
     const user: AuthUser = {
-      id: data.user?.id ?? payload.id ?? payload.userId ?? payload.sub ?? null,
+      id:
+        backendUser?.id ?? payload.id ?? payload.userId ?? payload.sub ?? null,
 
-      email: data.user?.email ?? payload.email ?? body.email ?? null,
+      email: backendUser?.email ?? payload.email ?? email,
 
-      role: data.user?.role ?? payload.role ?? null,
-
-      name: data.user?.name ?? payload.name ?? null,
+      role: backendUser?.role ?? payload.role ?? null,
     };
 
     const response = NextResponse.json({
       user,
     });
 
-    const maxAge = payload.exp
-      ? Math.max(payload.exp - Math.floor(Date.now() / 1000), 0)
-      : 60 * 60 * 24;
-
     response.cookies.set({
       name: "kasa_session",
       value: token,
+
       httpOnly: true,
+
       secure: process.env.NODE_ENV === "production",
+
       sameSite: "lax",
+
       path: "/",
-      maxAge,
+
+      maxAge: 60 * 60 * 24,
     });
 
     return response;
-  } catch {
+  } catch (error) {
+    console.error("[LOGIN] Erreur :", error);
+
     return NextResponse.json(
       {
-        message:
-          "Impossible de communiquer avec le serveur d'authentification.",
+        message: "Impossible de communiquer avec le serveur.",
       },
       {
         status: 500,

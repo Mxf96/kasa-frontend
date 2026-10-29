@@ -44,29 +44,22 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caractères.");
-
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
       await register({
-        firstName,
-        lastName,
-        email,
+        name: `${firstName.trim()} ${lastName.trim()}`,
+        email: email.trim(),
         password,
       });
 
-      router.push("/");
+      router.replace("/");
       router.refresh();
     } catch (error) {
       setError(
         error instanceof Error
           ? error.message
-          : "Une erreur est survenue lors de l'inscription.",
+          : "Impossible de créer votre compte.",
       );
     } finally {
       setIsSubmitting(false);
