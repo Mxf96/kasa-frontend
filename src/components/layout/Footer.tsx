@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import styles from "@/styles/components/layout/Footer.module.scss";
 
+/** Affiche le pied de page commun à toutes les pages Kasa. */
 export default function Footer() {
   return (
     <footer className={styles.footer}>

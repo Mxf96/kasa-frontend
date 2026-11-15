@@ -43,6 +43,10 @@
   line-height: 1;
 
   white-space: nowrap;
+  min-height: 32px;
+  padding: 8px 3px;
+  display: inline-flex;
+  align-items: center;
 
   color: $color-text;
 
@@ -50,7 +54,7 @@
 
   &:hover,
   &:focus-visible {
-    color: $color-primary;
+    color: $color-primary-contrast;
   }
 }
 
@@ -89,7 +93,7 @@
   font-size: 13px;
   font-weight: 400;
 
-  color: $color-primary;
+  color: $color-primary-contrast;
 
   transition: opacity 0.2s ease;
 
@@ -100,8 +104,8 @@
 }
 
 .iconLink {
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
 
   display: flex;
   align-items: center;
@@ -127,6 +131,7 @@
 .loginLink {
   display: flex;
   align-items: center;
+  min-height: 32px;
 
   gap: 7px;
 
@@ -135,7 +140,7 @@
   font-size: 13px;
   font-weight: 400;
 
-  color: #f25c42;
+  color: $color-primary-contrast;
 
   transition: opacity 0.2s ease;
 
@@ -168,8 +173,8 @@
 }
 
 .logoutButton {
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
 
   padding: 0;
 
@@ -247,8 +252,8 @@
   }
 
   .logoutButton {
-    width: 16px;
-    height: 16px;
+    width: 28px;
+    height: 28px;
   }
 
   .logoutIcon {
@@ -287,7 +292,18 @@
   }
 
   .actions {
+    gap: 3px;
+    margin-left: 0;
+  }
+
+  .logoutButton {
+    width: 26px;
+    height: 26px;
+  }
+
+  .navigation {
     gap: 7px;
+    margin-right: 0;
   }
 
   .addAccommodation {
@@ -295,8 +311,8 @@
   }
 
   .iconLink {
-    width: 16px;
-    height: 16px;
+    width: 26px;
+    height: 26px;
 
     img {
       width: 13px;

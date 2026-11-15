@@ -37,6 +37,13 @@ interface BackendLoginResponse {
   error?: string;
 }
 
+/**
+ * Lit les informations publiques d'un JWT renvoyé par le backend.
+ * Attention : le décodage ne vérifie PAS la signature ; la validation du token
+ * et des permissions reste de la responsabilité de l'API Express.
+ * @param token - JWT transmis par le backend après authentification.
+ * @returns Le payload décodé ou un objet vide si le format est invalide.
+ */
 function decodeJwt(token: string): JwtPayload {
   try {
     const payload = token.split(".")[1];
@@ -55,6 +62,10 @@ function decodeJwt(token: string): JwtPayload {
   }
 }
 
+/**
+ * Route de connexion : relaie les identifiants à Express puis définit un cookie
+ * `kasa_session` HttpOnly pour éviter d'exposer le JWT au code client.
+ */
 export async function POST(request: Request) {
   if (!API_URL) {
     return NextResponse.json(
@@ -84,11 +95,6 @@ export async function POST(request: Request) {
         },
       );
     }
-
-    console.log("[LOGIN] Envoi au backend :", {
-      email,
-      password: "***",
-    });
 
     const backendResponse = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
@@ -121,14 +127,6 @@ export async function POST(request: Request) {
       }
     }
 
-    console.log("[LOGIN] Réponse backend :", {
-      status: backendResponse.status,
-
-      ok: backendResponse.ok,
-
-      data,
-    });
-
     if (!backendResponse.ok) {
       return NextResponse.json(
         {
@@ -152,7 +150,7 @@ export async function POST(request: Request) {
       data.data?.access_token;
 
     if (!token) {
-      console.error("[LOGIN] Aucun token trouvé :", data);
+      console.error("[LOGIN] Aucun token retourné par le backend.");
 
       return NextResponse.json(
         {

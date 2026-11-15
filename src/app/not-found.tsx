@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import styles from "@/styles/app/NotFound.module.scss";
 
+/** Page 404 personnalisée utilisée lorsque la ressource demandée est introuvable. */
 export default function NotFound() {
   return (
     <section className={styles.notFound}>
@@ -19,8 +20,8 @@ export default function NotFound() {
             Accueil
           </Link>
 
-          <Link href="/accommodations" className={styles.button}>
-            Logements
+          <Link href="/" className={styles.button}>
+            Voir les logements
           </Link>
         </div>
       </div>

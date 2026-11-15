@@ -8,6 +8,10 @@ interface BackendRegisterResponse {
   [key: string]: unknown;
 }
 
+/**
+ * Route d'inscription : valide les champs minimaux et relaie la création
+ * d'un compte `client` vers Express. La connexion est gérée séparément.
+ */
 export async function POST(request: Request) {
   if (!API_URL) {
     return NextResponse.json(
@@ -29,7 +33,7 @@ export async function POST(request: Request) {
     const lastName =
       typeof body.lastName === "string" ? body.lastName.trim() : "";
 
-    /*
+    /**
      * Accepte :
      * { name, email, password }
      *
@@ -45,15 +49,7 @@ export async function POST(request: Request) {
 
     const password = typeof body.password === "string" ? body.password : "";
 
-    console.log("[REGISTER] Données reçues du frontend :", {
-      name,
-      email,
-      passwordReceived: Boolean(password),
-    });
-
     if (!name) {
-      console.error("[REGISTER] Nom manquant");
-
       return NextResponse.json(
         {
           message: "Le nom est obligatoire.",
@@ -93,13 +89,6 @@ export async function POST(request: Request) {
       role: "client",
     };
 
-    console.log("[REGISTER] Envoi au backend :", {
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-      password: "***",
-    });
-
     const backendResponse = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
 
@@ -126,12 +115,6 @@ export async function POST(request: Request) {
         };
       }
     }
-
-    console.log("[REGISTER] Réponse backend :", {
-      status: backendResponse.status,
-      ok: backendResponse.ok,
-      data,
-    });
 
     if (!backendResponse.ok) {
       return NextResponse.json(

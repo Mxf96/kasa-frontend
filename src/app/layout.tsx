@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   description: "Plateforme de location Kasa",
 };
 
+/**
+ * Layout principal : police, métadonnées, navigation et fournisseurs globaux.
+ * `FavoritesProvider` est imbriqué dans `AuthProvider` car il dépend de la session.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,11 +32,17 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body>
+        <a className="skipLink" href="#contenu-principal">
+          Aller au contenu principal
+        </a>
+
         <AuthProvider>
           <FavoritesProvider>
             <Header />
 
-            <main>{children}</main>
+            <main id="contenu-principal" tabIndex={-1}>
+              {children}
+            </main>
 
             <Footer />
           </FavoritesProvider>

@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import styles from "@/styles/app/About.module.scss";
 
+/** Page de présentation statique de la plateforme Kasa. */
 export default function AboutPage() {
   return (
     <div className={styles.about}>

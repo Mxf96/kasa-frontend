@@ -43,3 +43,36 @@ img {
   display: block;
   max-width: 100%;
 }
+/* Lien d'évitement : affiché uniquement lors de la navigation au clavier. */
+.skipLink {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #1a2225;
+  transform: translateY(-160%);
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
+}
+
+/* Indicateur de focus visible, y compris pour les liens et boutons iconographiques. */
+body :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid #1a2225;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

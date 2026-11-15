@@ -12,6 +12,12 @@ interface JwtPayload {
   exp?: number;
 }
 
+/**
+ * Décodage non cryptographique du JWT : NE valide PAS la signature.
+ * Une vérification par le backend est indispensable pour les accès protégés.
+ * @param token - Jeton récupéré depuis le cookie HttpOnly.
+ * @returns Les champs décodés ou un objet vide en cas d'échec.
+ */
 function decodeJwt(token: string): JwtPayload {
   try {
     const payload = token.split(".")[1];
@@ -30,6 +36,10 @@ function decodeJwt(token: string): JwtPayload {
   }
 }
 
+/**
+ * Renvoie l'utilisateur associé au cookie de session pour initialiser le frontend.
+ * Vérifie l'expiration déclarée, mais ne constitue pas une validation JWT signée.
+ */
 export async function GET() {
   const cookieStore = await cookies();
 

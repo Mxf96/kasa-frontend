@@ -9,6 +9,15 @@ interface RouteContext {
   }>;
 }
 
+/**
+ * Proxifie une requête authentifiée vers l'API Express à URL de base fixe.
+ * Le token vient du cookie HttpOnly et est ajouté dans l'en-tête `Authorization`.
+ * Le corps et le statut de réponse sont retransmis au navigateur.
+ *
+ * @param request - Requête entrante vers `/api/backend/...`.
+ * @param context - Segments de chemin fournis par l'App Router.
+ * @returns La réponse HTTP du backend ou une erreur de session/configuration.
+ */
 async function proxyRequest(request: Request, context: RouteContext) {
   const API_URL = process.env.API_URL;
 
@@ -57,6 +66,7 @@ async function proxyRequest(request: Request, context: RouteContext) {
     headers.set("Content-Type", contentType);
   }
 
+  // Les méthodes GET et HEAD ne doivent pas transmettre de corps de requête.
   const hasBody = !["GET", "HEAD"].includes(request.method);
 
   const backendResponse = await fetch(targetUrl, {
@@ -106,18 +116,22 @@ async function proxyRequest(request: Request, context: RouteContext) {
   });
 }
 
+/** Route GET du proxy authentifié. */
 export function GET(request: Request, context: RouteContext) {
   return proxyRequest(request, context);
 }
 
+/** Route POST du proxy authentifié. */
 export function POST(request: Request, context: RouteContext) {
   return proxyRequest(request, context);
 }
 
+/** Route PATCH du proxy authentifié. */
 export function PATCH(request: Request, context: RouteContext) {
   return proxyRequest(request, context);
 }
 
+/** Route DELETE du proxy authentifié. */
 export function DELETE(request: Request, context: RouteContext) {
   return proxyRequest(request, context);
 }

@@ -15,6 +15,7 @@ import type { Property } from "@/types/property";
 
 import { useAuth } from "@/context/AuthContext";
 
+/** API commune de lecture et modification des logements favoris. */
 interface FavoritesContextValue {
   favorites: Property[];
 
@@ -35,6 +36,11 @@ const FavoritesContext = createContext<FavoritesContextValue | undefined>(
   undefined,
 );
 
+/**
+ * Centralise les favoris de l'utilisateur connecté.
+ * Cette implémentation est actuellement synchronisée avec l'API Express ;
+ * elle ne persiste pas encore les favoris dans `localStorage`.
+ */
 export function FavoritesProvider({ children }: FavoritesProviderProps) {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
@@ -42,6 +48,7 @@ export function FavoritesProvider({ children }: FavoritesProviderProps) {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  /** Recharge les favoris depuis le backend ou efface la liste sans session. */
   const refreshFavorites = useCallback(async () => {
     if (!user?.id || !isAuthenticated) {
       setFavorites([]);
@@ -71,6 +78,7 @@ export function FavoritesProvider({ children }: FavoritesProviderProps) {
     void refreshFavorites();
   }, [isAuthLoading, refreshFavorites]);
 
+  /** Détermine si un logement figure déjà dans la liste courante. */
   const isFavorite = useCallback(
     (propertyId: string) => {
       return favorites.some((property) => property.id === propertyId);
@@ -78,6 +86,7 @@ export function FavoritesProvider({ children }: FavoritesProviderProps) {
     [favorites],
   );
 
+  /** Inverse l'état d'un favori côté backend avant d'actualiser la liste. */
   const toggleFavorite = useCallback(
     async (propertyId: string) => {
       if (!isAuthenticated) {
@@ -119,6 +128,11 @@ export function FavoritesProvider({ children }: FavoritesProviderProps) {
   );
 }
 
+/**
+ * Accède à l'état et aux actions des favoris.
+ * @returns Les logements favoris et les fonctions de mise à jour.
+ * @throws {Error} Si le hook est utilisé hors de `FavoritesProvider`.
+ */
 export function useFavorites() {
   const context = useContext(FavoritesContext);
 

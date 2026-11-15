@@ -7,6 +7,10 @@ import { useAuth } from "@/context/AuthContext";
 
 import styles from "@/styles/components/layout/Header.module.scss";
 
+/**
+ * Navigation globale Kasa : liens principaux et actions selon la session.
+ * Les actions nécessitant un compte ne s'affichent qu'après son chargement.
+ */
 export default function Header() {
   const { user, isLoading, logout } = useAuth();
 

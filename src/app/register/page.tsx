@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 
 import styles from "@/styles/app/Register.module.scss";
 
+/** Page d'inscription connectée au backend par `AuthContext`. */
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -33,6 +34,7 @@ export default function RegisterPage() {
     }
   }, [isAuthenticated, router]);
 
+  /** Valide le consentement, crée le compte puis redirige après connexion. */
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 

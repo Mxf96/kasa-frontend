@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 
 import styles from "@/styles/app/Login.module.scss";
 
+/** Page de connexion : formulaire contrôlé et redirection après authentification. */
 export default function LoginPage() {
   const router = useRouter();
 
@@ -21,12 +22,14 @@ export default function LoginPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // La navigation doit se faire après le rendu, jamais pendant le rendu React.
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       router.replace("/");
     }
   }, [isAuthenticated, isLoading, router]);
 
+  /** Envoie les identifiants via AuthContext et affiche une éventuelle erreur. */
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -51,14 +54,14 @@ export default function LoginPage() {
 
   if (isLoading || isAuthenticated) {
     return (
-      <main className={styles.loginPage}>
-        <p>Chargement...</p>
-      </main>
+      <div className={styles.loginPage}>
+        <p role="status">Chargement...</p>
+      </div>
     );
   }
 
   return (
-    <main className={styles.loginPage}>
+    <div className={styles.loginPage}>
       <section className={styles.loginCard}>
         <div className={styles.heading}>
           <h1>Se connecter</h1>
@@ -118,6 +121,6 @@ export default function LoginPage() {
           </p>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

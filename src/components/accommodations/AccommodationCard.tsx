@@ -12,6 +12,7 @@ import { getImageUrl } from "@/lib/images";
 
 import styles from "@/styles/components/accommodations/AccommodationCard.module.scss";
 
+/** Données minimales nécessaires à l'affichage d'une carte de logement. */
 interface AccommodationCardProps {
   id: string;
   title: string;
@@ -20,6 +21,10 @@ interface AccommodationCardProps {
   image: string | null;
 }
 
+/**
+ * Affiche un résumé de logement et son bouton favori pour les utilisateurs connectés.
+ * @param props - Identifiant, titre, localisation, prix et image du logement.
+ */
 export default function AccommodationCard({
   id,
   title,
@@ -35,6 +40,7 @@ export default function AccommodationCard({
 
   const favorite = isFavorite(id);
 
+  /** Désactive temporairement le cœur pour éviter plusieurs mutations simultanées. */
   async function handleFavoriteClick() {
     if (isUpdating) {
       return;
@@ -57,7 +63,7 @@ export default function AccommodationCard({
         <div className={styles.imageWrapper}>
           <Image
             src={getImageUrl(image)}
-            alt={title}
+            alt=""
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
           />
@@ -78,11 +84,7 @@ export default function AccommodationCard({
           className={`${styles.favoriteButton} ${
             favorite ? styles.favoriteButtonActive : ""
           }`}
-          aria-label={
-            favorite
-              ? `Retirer ${title} des favoris`
-              : `Ajouter ${title} aux favoris`
-          }
+          aria-label={`Favori : ${title}`}
           aria-pressed={favorite}
           disabled={isUpdating}
           onClick={handleFavoriteClick}

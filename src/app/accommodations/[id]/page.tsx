@@ -13,6 +13,11 @@ interface AccommodationPageProps {
   }>;
 }
 
+/**
+ * Page serveur présentant le détail d'un logement identifié par son ID.
+ * Rend la page 404 si la récupération du logement échoue.
+ * La galerie actuelle est statique (le carrousel demandé reste à développer).
+ */
 export default async function AccommodationPage({
   params,
 }: AccommodationPageProps) {
@@ -26,6 +31,7 @@ export default async function AccommodationPage({
     notFound();
   }
 
+  // Unifie la couverture et les photos supplémentaires sans doublons ni valeurs vides.
   const gallery = Array.from(
     new Set(
       [accommodation.cover, ...(accommodation.pictures ?? [])].filter(
@@ -47,7 +53,7 @@ export default async function AccommodationPage({
     .toUpperCase();
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <Link href="/" className={styles.backButton}>
         ← Retour aux annonces
       </Link>
@@ -168,12 +174,16 @@ export default async function AccommodationPage({
           </div>
 
           <div className={styles.hostActions}>
-            <button type="button">Contacter l’hôte</button>
+            <button type="button" disabled title="Fonctionnalité non disponible">
+              Contacter l’hôte
+            </button>
 
-            <button type="button">Envoyer un message</button>
+            <button type="button" disabled title="Fonctionnalité non disponible">
+              Envoyer un message
+            </button>
           </div>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

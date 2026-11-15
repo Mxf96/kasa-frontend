@@ -11,6 +11,7 @@ import {
 
 import type { AuthUser, LoginCredentials, RegisterData } from "@/types/auth";
 
+/** Contrat public du contexte d'authentification utilisé par les composants. */
 interface AuthContextValue {
   user: AuthUser | null;
 
@@ -33,11 +34,17 @@ interface AuthProviderProps {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+/**
+ * Fournit l'utilisateur connecté et les actions d'authentification à l'application.
+ * La session est récupérée à l'initialisation depuis le cookie HttpOnly via
+ * `/api/auth/session` : le token n'est jamais lu directement côté navigateur.
+ */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
+  /** Recharge la session au montage et après une éventuelle évolution du compte. */
   const refreshUser = useCallback(async () => {
     try {
       const response = await fetch("/api/auth/session", {
@@ -72,6 +79,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     void initialize();
   }, [refreshUser]);
 
+  /** Se connecte via la route Next.js puis synchronise l'utilisateur en mémoire. */
   const login = useCallback(async ({ email, password }: LoginCredentials) => {
     const response = await fetch("/api/auth/login", {
       method: "POST",
@@ -102,6 +110,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(data.user);
   }, []);
 
+  /** Crée le compte puis ouvre automatiquement une session. */
   const register = useCallback(
     async ({ name, email, password }: RegisterData) => {
       const response = await fetch("/api/auth/register", {
@@ -134,6 +143,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [login],
   );
 
+  /** Déconnecte le compte et vide son état dans le contexte. */
   const logout = useCallback(async () => {
     try {
       await fetch("/api/auth/logout", {
@@ -166,6 +176,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+/**
+ * Accède au contexte d'authentification.
+ * @returns L'utilisateur courant, l'état de chargement et les actions de session.
+ * @throws {Error} Si le hook est utilisé hors de `AuthProvider`.
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
 

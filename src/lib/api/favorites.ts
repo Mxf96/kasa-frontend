@@ -12,6 +12,11 @@ interface FavoritesObjectResponse {
 
 type FavoritesResponse = Property[] | FavoritesObjectResponse;
 
+/**
+ * Unifie les différents formats de réponse pris en charge par l'API favoris.
+ * @param data - Tableau brut ou objet contenant la liste des favoris.
+ * @returns La liste des logements favoris, ou un tableau vide si elle est absente.
+ */
 function normalizeFavorites(data: FavoritesResponse): Property[] {
   if (Array.isArray(data)) {
     return data;
@@ -36,6 +41,12 @@ function normalizeFavorites(data: FavoritesResponse): Property[] {
   return [];
 }
 
+/**
+ * Charge les favoris de l'utilisateur connecté via le proxy Next.js authentifié.
+ * @param userId - Identifiant du compte propriétaire de la liste.
+ * @returns Les logements favoris normalisés.
+ * @throws {Error} Si le backend ne peut pas retourner la liste.
+ */
 export async function getFavorites(
   userId: string | number,
 ): Promise<Property[]> {
@@ -56,6 +67,11 @@ export async function getFavorites(
   return normalizeFavorites(data);
 }
 
+/**
+ * Enregistre un logement dans les favoris côté backend.
+ * @param propertyId - Identifiant du logement à ajouter.
+ * @throws {Error} Si l'opération est refusée ou échoue.
+ */
 export async function addFavorite(propertyId: string): Promise<void> {
   const response = await fetch(
     `/api/backend/api/properties/${encodeURIComponent(propertyId)}/favorite`,
@@ -78,6 +94,11 @@ export async function addFavorite(propertyId: string): Promise<void> {
   }
 }
 
+/**
+ * Retire un logement des favoris côté backend.
+ * @param propertyId - Identifiant du logement à retirer.
+ * @throws {Error} Si l'opération est refusée ou échoue.
+ */
 export async function removeFavorite(propertyId: string): Promise<void> {
   const response = await fetch(
     `/api/backend/api/properties/${encodeURIComponent(propertyId)}/favorite`,

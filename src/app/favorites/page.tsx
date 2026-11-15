@@ -12,6 +12,10 @@ import { useFavorites } from "@/context/FavoritesContext";
 
 import styles from "@/styles/app/Favorites.module.scss";
 
+/**
+ * Affiche la liste de favoris liée à la session courante.
+ * Un utilisateur non connecté est redirigé vers la page de connexion.
+ */
 export default function FavoritesPage() {
   const router = useRouter();
 
@@ -43,7 +47,7 @@ export default function FavoritesPage() {
       </section>
 
       {isLoading ? (
-        <p className={styles.message}>Chargement des favoris...</p>
+        <p className={styles.message} role="status">Chargement des favoris...</p>
       ) : favorites.length > 0 ? (
         <section className={styles.grid} aria-label="Mes logements favoris">
           {favorites.map((property) => (

@@ -23,6 +23,12 @@
 
     box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
   }
+
+  /* Le conteneur affiche un focus même si le lien interne est rogné. */
+  &:focus-within {
+    outline: 3px solid #1a2225;
+    outline-offset: 3px;
+  }
 }
 
 .cardLink {
@@ -125,7 +131,7 @@
   font-size: 12px;
   line-height: 1.4;
 
-  color: #797979;
+  color: #666666;
 }
 
 .price {
@@ -133,7 +139,7 @@
 
   font-size: 12px;
 
-  color: #777777;
+  color: #666666;
 
   strong {
     font-size: 13px;

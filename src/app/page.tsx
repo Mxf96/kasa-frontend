@@ -6,6 +6,10 @@ import { getProperties } from "@/lib/api/properties";
 
 import styles from "@/styles/app/page.module.scss";
 
+/**
+ * Page d'accueil rendue côté serveur à partir de la liste des logements de l'API.
+ * L'affichage des cartes est délégué à `AccommodationCard`.
+ */
 export default async function Home() {
   const accommodations = await getProperties();
 
