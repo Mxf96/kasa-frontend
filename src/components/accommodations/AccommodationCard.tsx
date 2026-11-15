@@ -4,24 +4,20 @@ import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/context/AuthContext";
-
 import { useFavorites } from "@/context/FavoritesContext";
+
+import { getImageUrl } from "@/lib/images";
 
 import styles from "@/styles/components/accommodations/AccommodationCard.module.scss";
 
 interface AccommodationCardProps {
   id: string;
-
   title: string;
-
   location: string;
-
   price: number;
-
-  image: string;
+  image: string | null;
 }
 
 export default function AccommodationCard({
@@ -31,9 +27,7 @@ export default function AccommodationCard({
   price,
   image,
 }: AccommodationCardProps) {
-  const router = useRouter();
-
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -41,14 +35,8 @@ export default function AccommodationCard({
 
   const favorite = isFavorite(id);
 
-  async function handleFavorite() {
-    if (isUpdating || isAuthLoading) {
-      return;
-    }
-
-    if (!user) {
-      router.push("/login");
-
+  async function handleFavoriteClick() {
+    if (isUpdating) {
       return;
     }
 
@@ -57,7 +45,7 @@ export default function AccommodationCard({
 
       await toggleFavorite(id);
     } catch (error) {
-      console.error("Impossible de modifier le favori :", error);
+      console.error("Erreur lors de la modification du favori :", error);
     } finally {
       setIsUpdating(false);
     }
@@ -68,49 +56,40 @@ export default function AccommodationCard({
       <Link href={`/accommodations/${id}`} className={styles.cardLink}>
         <div className={styles.imageWrapper}>
           <Image
-            src={image}
+            src={getImageUrl(image)}
             alt={title}
             fill
-            sizes="
-              (max-width: 768px) 100vw,
-              (max-width: 1100px) 50vw,
-              33vw
-            "
-            className={styles.image}
+            sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
           />
         </div>
 
         <div className={styles.content}>
-          <div>
-            <h2 className={styles.title}>{title}</h2>
+          <h2>{title}</h2>
 
-            <p className={styles.location}>{location}</p>
-          </div>
+          <p>{location}</p>
 
-          <p className={styles.price}>
-            <strong>{price}€</strong>
-
-            <span> par nuit</span>
-          </p>
+          <span>{price} € / nuit</span>
         </div>
       </Link>
 
-      <button
-        type="button"
-        className={`${styles.favoriteButton} ${
-          favorite ? styles.favoriteButtonActive : ""
-        }`}
-        aria-label={
-          favorite
-            ? `Retirer ${title} des favoris`
-            : `Ajouter ${title} aux favoris`
-        }
-        aria-pressed={favorite}
-        disabled={isUpdating}
-        onClick={handleFavorite}
-      >
-        {favorite ? "♥" : "♡"}
-      </button>
+      {isAuthenticated && (
+        <button
+          type="button"
+          className={`${styles.favoriteButton} ${
+            favorite ? styles.favoriteButtonActive : ""
+          }`}
+          aria-label={
+            favorite
+              ? `Retirer ${title} des favoris`
+              : `Ajouter ${title} aux favoris`
+          }
+          aria-pressed={favorite}
+          disabled={isUpdating}
+          onClick={handleFavoriteClick}
+        >
+          {favorite ? "♥" : "♡"}
+        </button>
+      )}
     </article>
   );
 }

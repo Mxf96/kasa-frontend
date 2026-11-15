@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/context/AuthContext";
@@ -11,17 +11,21 @@ import styles from "@/styles/app/Login.module.scss";
 export default function LoginPage() {
   const router = useRouter();
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isLoading } = useAuth();
 
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (isAuthenticated) {
-    router.replace("/");
-  }
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,12 +35,9 @@ export default function LoginPage() {
 
     try {
       await login({
-        email,
+        email: email.trim(),
         password,
       });
-
-      router.replace("/");
-      router.refresh();
     } catch (error) {
       setError(
         error instanceof Error
@@ -48,19 +49,24 @@ export default function LoginPage() {
     }
   }
 
-  return (
-    <div className={styles.loginPage}>
-      <section className={styles.loginCard}>
-        <div className={styles.header}>
-          <h1>Heureux de vous revoir</h1>
+  if (isLoading || isAuthenticated) {
+    return (
+      <main className={styles.loginPage}>
+        <p>Chargement...</p>
+      </main>
+    );
+  }
 
-          <p>
-            Connectez-vous pour retrouver vos réservations, vos annonces et tout
-            ce qui rend vos séjours uniques.
-          </p>
+  return (
+    <main className={styles.loginPage}>
+      <section className={styles.loginCard}>
+        <div className={styles.heading}>
+          <h1>Se connecter</h1>
+
+          <p>Connectez-vous à votre compte Kasa.</p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label htmlFor="email">Adresse email</label>
 
@@ -68,9 +74,9 @@ export default function LoginPage() {
               id="email"
               name="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email"
               required
             />
           </div>
@@ -82,9 +88,9 @@ export default function LoginPage() {
               id="password"
               name="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
               required
             />
           </div>
@@ -105,13 +111,13 @@ export default function LoginPage() {
         </form>
 
         <div className={styles.links}>
-          <Link href="/forgot-password">Mot de passe oublié</Link>
+          <Link href="/forgot-password">Mot de passe oublié ?</Link>
 
           <p>
-            Pas encore de compte ? <Link href="/register">Inscrivez-vous</Link>
+            Pas encore de compte ? <Link href="/register">Créer un compte</Link>
           </p>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

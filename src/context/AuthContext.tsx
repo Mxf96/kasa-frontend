@@ -140,7 +140,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         method: "POST",
       });
     } finally {
-      setUser(null);
+      setUser(null); 
     }
   }, []);
 

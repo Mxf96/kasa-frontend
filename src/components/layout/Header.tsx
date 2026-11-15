@@ -37,14 +37,13 @@ export default function Header() {
           {!isLoading &&
             (user ? (
               <>
-                <Link
+                {/* <Link
                   href="/accommodations/new"
                   className={styles.addAccommodation}
                 >
                   <span aria-hidden="true">+</span>
                   <span>Ajouter un logement</span>
-                </Link>
-
+                </Link> */}
                 <Link
                   href="/favorites"
                   className={styles.iconLink}

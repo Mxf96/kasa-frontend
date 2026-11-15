@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getPropertyById } from "@/lib/api/properties";
+import { getImageUrl } from "@/lib/images";
 
 import styles from "@/styles/app/Accommodation.module.scss";
 
@@ -25,94 +26,93 @@ export default async function AccommodationPage({
     notFound();
   }
 
-  if (!accommodation) {
-    notFound();
-  }
-
-  /*
-   * On combine la cover et la galerie du backend.
-   * Set évite d'afficher deux fois la même image.
-   */
-  const galleryImages = Array.from(
+  const gallery = Array.from(
     new Set(
       [accommodation.cover, ...(accommodation.pictures ?? [])].filter(
         (image): image is string => Boolean(image),
       ),
     ),
-  ).slice(0, 5);
+  );
+
+  const mainImage = gallery[0] ?? null;
+
+  const secondaryImages = gallery.slice(1, 4);
+
+  const hostInitials = accommodation.host.name
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <div className={styles.page}>
+    <main className={styles.page}>
       <Link href="/" className={styles.backButton}>
-        <span aria-hidden="true">←</span>
-        Retour aux annonces
+        ← Retour aux annonces
       </Link>
 
       <div className={styles.layout}>
         <div className={styles.mainContent}>
+          {/* Galerie */}
+
           <section
             className={styles.gallery}
             aria-label={`Photos de ${accommodation.title}`}
           >
-            {galleryImages.map((image, index) => (
+            <div className={styles.mainImage}>
+              {mainImage ? (
+                <Image
+                  src={getImageUrl(mainImage)}
+                  alt={accommodation.title}
+                  fill
+                  priority
+                  sizes="(max-width: 900px) 100vw, 60vw"
+                />
+              ) : (
+                <Image
+                  src={getImageUrl(null)}
+                  alt=""
+                  fill
+                  priority
+                  sizes="(max-width: 900px) 100vw, 60vw"
+                />
+              )}
+            </div>
+
+            {secondaryImages.map((picture, index) => (
               <div
-                key={image}
-                className={
-                  index === 0 ? styles.mainImage : styles.secondaryImage
-                }
+                key={`${picture}-${index}`}
+                className={styles.secondaryImage}
               >
                 <Image
-                  src={image}
-                  alt={
-                    index === 0
-                      ? accommodation.title
-                      : `${accommodation.title} - photo ${index + 1}`
-                  }
+                  src={getImageUrl(picture)}
+                  alt={`${accommodation.title} - photo ${index + 2}`}
                   fill
-                  priority={index === 0}
-                  sizes={
-                    index === 0
-                      ? "(max-width: 900px) 100vw, 55vw"
-                      : "(max-width: 900px) 50vw, 20vw"
-                  }
+                  sizes="(max-width: 900px) 50vw, 25vw"
                 />
               </div>
             ))}
           </section>
 
+          {/* Informations */}
+
           <section className={styles.information}>
             <h1>{accommodation.title}</h1>
 
-            <div className={styles.location}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-                <circle
-                  cx="12"
-                  cy="10"
-                  r="2"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                />
-              </svg>
+            <p className={styles.location}>
+              <span aria-hidden="true">♧</span>
 
-              <span>{accommodation.location}</span>
-            </div>
+              {accommodation.location}
+            </p>
 
-            {accommodation.description && (
-              <p className={styles.description}>{accommodation.description}</p>
-            )}
+            <p className={styles.description}>{accommodation.description}</p>
 
-            {accommodation.equipments?.length > 0 && (
+            {accommodation.equipments.length > 0 && (
               <div className={styles.section}>
                 <h2>Équipements</h2>
 
-                <ul className={styles.tags}>
+                <ul>
                   {accommodation.equipments.map((equipment) => (
                     <li key={equipment}>{equipment}</li>
                   ))}
@@ -120,63 +120,60 @@ export default async function AccommodationPage({
               </div>
             )}
 
-            {accommodation.tags?.length > 0 && (
+            {accommodation.tags.length > 0 && (
               <div className={styles.section}>
-                <h2>Catégorie</h2>
+                <h2>Catégories</h2>
 
-                <ul className={styles.tags}>
+                <div className={styles.tags}>
                   {accommodation.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
+                    <span key={tag}>{tag}</span>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </section>
         </div>
 
+        {/* Hôte */}
+
         <aside className={styles.hostCard}>
           <h2>Votre hôte</h2>
 
           <div className={styles.hostInfo}>
-            {accommodation.host?.picture ? (
-              <Image
-                src={accommodation.host.picture}
-                alt={`Photo de ${accommodation.host.name}`}
-                width={72}
-                height={72}
-                className={styles.hostPicture}
-              />
-            ) : (
-              <div className={styles.hostPlaceholder} aria-hidden="true">
-                {accommodation.host?.name
-                  ?.split(" ")
-                  .map((part) => part.charAt(0))
-                  .join("")
-                  .slice(0, 2)}
-              </div>
-            )}
+            <div className={styles.hostPicture}>
+              {accommodation.host.picture ? (
+                <Image
+                  src={getImageUrl(accommodation.host.picture)}
+                  alt={`Photo de ${accommodation.host.name}`}
+                  fill
+                  sizes="60px"
+                />
+              ) : (
+                <span className={styles.hostPlaceholder} aria-hidden="true">
+                  {hostInitials}
+                </span>
+              )}
+            </div>
 
-            <div className={styles.hostName}>{accommodation.host?.name}</div>
+            <p className={styles.hostName}>{accommodation.host.name}</p>
 
             <div
               className={styles.rating}
               aria-label={`Note ${accommodation.rating_avg} sur 5`}
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m12 2.5 2.93 5.94 6.56.95-4.75 4.63 1.12 6.53L12 17.47l-5.86 3.08 1.12-6.53-4.75-4.63 6.56-.95L12 2.5Z" />
-              </svg>
+              <span aria-hidden="true">★</span>
 
-              <span>{Number(accommodation.rating_avg).toFixed(1)}</span>
+              <span>{Number(accommodation.rating_avg ?? 0).toFixed(1)}</span>
             </div>
           </div>
 
           <div className={styles.hostActions}>
-            <button type="button">Contacter l&apos;hôte</button>
+            <button type="button">Contacter l’hôte</button>
 
             <button type="button">Envoyer un message</button>
           </div>
         </aside>
       </div>
-    </div>
+    </main>
   );
 }
