@@ -10,7 +10,7 @@ export default function Footer() {
       <div className={styles.footerContainer}>
         <Link href="/" className={styles.logo} aria-label="Kasa - Accueil">
           <Image
-            src="/assets/img/logo/logo(2).svg"
+            src="/assets/img/logo/Logo(2).svg"
             alt="Kasa"
             width={36}
             height={36}

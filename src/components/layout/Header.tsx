@@ -29,7 +29,7 @@ export default function Header() {
 
         <Link href="/" className={styles.logo} aria-label="Kasa - Accueil">
           <Image
-            src="/assets/img/logo/logo.svg"
+            src="/assets/img/logo/Logo.svg"
             alt="Kasa"
             width={120}
             height={45}
@@ -54,7 +54,7 @@ export default function Header() {
                   aria-label="Mes favoris"
                 >
                   <Image
-                    src="/assets/img/icons/heart.svg"
+                    src="/assets/img/icons/Heart.svg"
                     alt=""
                     width={18}
                     height={18}
@@ -67,7 +67,7 @@ export default function Header() {
                   aria-label="Mes messages"
                 >
                   <Image
-                    src="/assets/img/icons/message.svg"
+                    src="/assets/img/icons/Message.svg"
                     alt=""
                     width={18}
                     height={18}
