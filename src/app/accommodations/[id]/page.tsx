@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { getPropertyById } from "@/lib/api/properties";
 import { getImageUrl } from "@/lib/images";
+import AccommodationCarousel from "@/components/accommodations/AccommodationCarousel";
 
 import styles from "@/styles/app/Accommodation.module.scss";
 
@@ -16,7 +17,8 @@ interface AccommodationPageProps {
 /**
  * Page serveur présentant le détail d'un logement identifié par son ID.
  * Rend la page 404 si la récupération du logement échoue.
- * La galerie actuelle est statique (le carrousel demandé reste à développer).
+ * La galerie interactive est isolée dans un composant client pour conserver
+ * le reste de cette page côté serveur.
  */
 export default async function AccommodationPage({
   params,
@@ -40,10 +42,6 @@ export default async function AccommodationPage({
     ),
   );
 
-  const mainImage = gallery[0] ?? null;
-
-  const secondaryImages = gallery.slice(1, 4);
-
   const hostInitials = accommodation.host.name
     .split(" ")
     .filter(Boolean)
@@ -60,46 +58,8 @@ export default async function AccommodationPage({
 
       <div className={styles.layout}>
         <div className={styles.mainContent}>
-          {/* Galerie */}
-
-          <section
-            className={styles.gallery}
-            aria-label={`Photos de ${accommodation.title}`}
-          >
-            <div className={styles.mainImage}>
-              {mainImage ? (
-                <Image
-                  src={getImageUrl(mainImage)}
-                  alt={accommodation.title}
-                  fill
-                  priority
-                  sizes="(max-width: 900px) 100vw, 60vw"
-                />
-              ) : (
-                <Image
-                  src={getImageUrl(null)}
-                  alt=""
-                  fill
-                  priority
-                  sizes="(max-width: 900px) 100vw, 60vw"
-                />
-              )}
-            </div>
-
-            {secondaryImages.map((picture, index) => (
-              <div
-                key={`${picture}-${index}`}
-                className={styles.secondaryImage}
-              >
-                <Image
-                  src={getImageUrl(picture)}
-                  alt={`${accommodation.title} - photo ${index + 2}`}
-                  fill
-                  sizes="(max-width: 900px) 50vw, 25vw"
-                />
-              </div>
-            ))}
-          </section>
+          {/* Galerie interactive : le reste de la page reste rendu côté serveur. */}
+          <AccommodationCarousel images={gallery} title={accommodation.title} />
 
           {/* Informations */}
 
