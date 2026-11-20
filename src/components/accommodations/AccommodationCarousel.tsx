@@ -124,6 +124,7 @@ export default function AccommodationCarousel({
           }
           fill
           priority
+          unoptimized
           sizes="(max-width: 1000px) 100vw, 60vw"
         />
 
@@ -166,6 +167,7 @@ export default function AccommodationCarousel({
             src={getImageUrl(images[index])}
             alt=""
             fill
+            unoptimized
             sizes="(max-width: 750px) 33vw, 20vw"
           />
         </button>

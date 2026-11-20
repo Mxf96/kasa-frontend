@@ -6,9 +6,10 @@ import AccommodationCarousel from "../AccommodationCarousel";
 // Les tests portent sur la logique du carrousel, pas sur le chargement réseau
 // ni sur l'optimisation des images réalisée par Next.js.
 vi.mock("next/image", () => ({
-  default: ({ fill: _fill, priority: _priority, ...props }: {
+  default: ({ fill: _fill, priority: _priority, unoptimized: _unoptimized, ...props }: {
     fill?: boolean;
     priority?: boolean;
+    unoptimized?: boolean;
     src: string;
     alt: string;
     sizes?: string;

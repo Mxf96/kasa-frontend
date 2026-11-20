@@ -65,6 +65,8 @@ export default function AccommodationCard({
             src={getImageUrl(image)}
             alt=""
             fill
+            className={styles.image}
+            unoptimized
             sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
           />
         </div>

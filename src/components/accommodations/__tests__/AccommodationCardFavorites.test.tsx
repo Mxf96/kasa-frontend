@@ -10,7 +10,14 @@ vi.mock("@/context/FavoritesContext", () => ({ useFavorites: vi.fn() }));
 
 // Les tests ciblent le bouton favori, sans optimiser ni charger de vraies images.
 vi.mock("next/image", () => ({
-  default: ({ fill: _fill, ...props }: { src: string; alt: string; fill?: boolean; sizes?: string }) => (
+  default: ({ fill: _fill, unoptimized: _unoptimized, ...props }: {
+    src: string;
+    alt: string;
+    fill?: boolean;
+    unoptimized?: boolean;
+    sizes?: string;
+    className?: string;
+  }) => (
     <img {...props} />
   ),
 }));
